@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Welcome to RPA bug tracker</title>
 </head>
-<body onbeforeunload="HandleBackFunctionality()">
+<body>
 
 	<%
 		String username = null;
