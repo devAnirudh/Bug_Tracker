@@ -1,0 +1,6 @@
+emp_id		varchar(45)	NO	PRI		
+emp_f_name	varchar(45)	NO			
+emp_l_name	varchar(45)	NO			
+mobile		varchar(11)	NO			
+mail		varchar(100)	NO			
+password	varchar(45)	NO			
