@@ -1,3 +1,5 @@
+<%@page import="com.db.Bugs"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -27,7 +29,15 @@
 				System.out.println("Inside expired");	
 				response.sendRedirect("SessionExpired.html");
 			}
+		
+		ArrayList<String> bug_list = new ArrayList<String>();
+		Bugs b = new Bugs();
+		b.initialize_db();
+		bug_list = b.getDistinctBugs();
+		
 	%>
+	
+	
 	<div>
 		<p>
 			Welcome
@@ -38,6 +48,13 @@
 		<table>
 			<tr>
 				<td><font size="5px">Bugs assigned to you:</font></td>
+				<td><select>
+				<option value = <%= bug_list.get(0) %>></option>
+				<option value = <%= bug_list.get(1) %>></option>
+				<option value = <%= bug_list.get(2) %>></option>
+				<option value = <%= bug_list.get(3) %>></option>
+				</select>
+				</td>
 			</tr>
 		</table>
 	</div>

@@ -4,3 +4,11 @@ emp_l_name	varchar(45)	NO
 mobile		varchar(11)	NO			
 mail		varchar(100)	NO			
 password	varchar(45)	NO			
+
+
+Bugs:
+
+idbugs		int(11)	NO	PRI		auto_increment
+bug_desc	varchar(500)	NO			
+bug_type	varchar(50)	NO			
+emp_id		varchar(45)	YES	MUL		
