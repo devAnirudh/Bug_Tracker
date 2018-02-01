@@ -6,10 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author ND05178
+ *
+ */
 public class Validation {
 
-	public static String validate(String username, String password) {
-		String employeeName = null;
+	private String employee_id;
+	private String employee_name;
+	
+	public String validate(String username, String password) {
+		
 		try {
 			String query = "SELECT * FROM DEVELOPER_DETAILS WHERE EMP_ID = ? AND PASSWORD = ?";
 			Class.forName("com.mysql.jdbc.Driver");
@@ -21,9 +28,10 @@ public class Validation {
 			ResultSet rs = usersmt.executeQuery();
 			
 			if(rs.next()) {
-				employeeName = rs.getString("emp_f_name") + " "+ rs.getString("emp_l_name");
+				employee_name = rs.getString("emp_f_name") + " "+ rs.getString("emp_l_name");
+				employee_id = rs.getString("emp_id");
 			}else {
-				employeeName = "";
+				employee_name = "";
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -31,7 +39,16 @@ public class Validation {
 			e.printStackTrace();
 		}
 		
-		return employeeName;
+		return employee_name;
 	}
+
+	public String getEmployee_name() {
+		return employee_name;
+	}
+
+	public String getEmployee_id() {
+		return employee_id;
+	}
+	
 
 }

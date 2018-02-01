@@ -14,13 +14,15 @@
 		c = new Cookie("user_l_name",""); 
 		c.setMaxAge(0);
 		response.addCookie(c);
+		
+		request.getSession().invalidate();
 	%>
 
-	<p>You are successfully logged out. You will be redirected to login within 10 seconds.
-		page</p>
+	<p>You are successfully logged out. You will be redirected to login page within 10 seconds.
+		</p>
 
 	<%
-		response.setHeader("Refresh", "10; URL=Login.html");
+		response.setHeader("Refresh", "10; URL=Login.jsp");
 	%>
 </body>
 </html>

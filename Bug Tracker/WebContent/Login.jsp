@@ -54,7 +54,8 @@ input {
 <body>
 	
 	<% 
-		if(request.getCookies().length > 1) {
+	
+		if(request.getCookies() != null && request.getCookies().length > 1) {
 			response.sendRedirect("Welcome.jsp");
 		}
 	%>
