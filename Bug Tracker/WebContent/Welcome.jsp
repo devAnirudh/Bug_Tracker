@@ -49,7 +49,7 @@
 			</tr>
 			<tr>
 				<td>Select type of bug:</td>
-				<td><select>
+				<td><select id = "bug_list" onchange="sendSelected()">
 						<%
 							for (String bug_type : bug_list) {
 						%>
@@ -63,8 +63,9 @@
 			</tr>
 		</table>
 	</div>
-
+	
 	<div>
+		
 		<table>
 			<tr>
 				<th>Bug Id</th>
@@ -73,7 +74,7 @@
 			</tr>
 			<%
 				String emp_id = request.getSession().getAttribute("employee_id").toString();
-				ArrayList<Bugs> bugs = b.getBugs(emp_id);
+				ArrayList<Bugs> bugs = b.getBugs(emp_id, "EMP_ID");
 				for(int i = 0; i < bugs.size(); i++) {
 				%>
 			<tr>
@@ -86,6 +87,10 @@
 			
 			%>
 		</table>
+	</div>
+	
+	<div id = "test">
+	<input type = "text" id="test1">
 	</div>
 
 </body>
@@ -110,6 +115,29 @@
 		}
 
 	}
+	
+	function sendSelected() {
+		
+		var d = document.getElementById("bug_list");
+		var selectedBug = d.options[d.selectedIndex].value;
+		var url = "FilteredBugs.jsp?bug="+selectedBug;
+		var test = document.getElementById("test1");
+		
+		request = new XMLHttpRequest();
+		
+		request.open("GET",url,true);
+		request.send();
+		
+		request.onreadystatechange = function getInfo() {
+			if(request.readyState == 4) {
+				var val = request.responseText;
+				test.value = val;
+			}
+			
+		}
+		
+	}
+	
 </script>
 
 </html>

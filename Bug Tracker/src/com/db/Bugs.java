@@ -63,9 +63,13 @@ public class Bugs {
 		}
 	}
 
-	public ArrayList<Bugs> getBugs(String user_id) {
-
-		String getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ?";
+	public ArrayList<Bugs> getBugs(String user_id, String filter) {
+		String getBugs = "";
+		if(filter.equalsIgnoreCase("EMP_ID")) {
+			getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ?";
+		}else if(filter.equalsIgnoreCase("TYPE")){
+			getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE BUG_TYPE = ?";
+		}
 		if(con != null) {
 			try {
 				PreparedStatement smt = con.prepareStatement(getBugs);
@@ -88,6 +92,8 @@ public class Bugs {
 		}
 		return null;
 	}
+	
+	
 
 
 	public Connection getCon() {
