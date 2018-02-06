@@ -13,6 +13,7 @@ public class Bugs {
 	private String bug_type;
 	private String bug_desc;
 	private String bug_id;
+	private String status;
 	private ArrayList<Bugs> bugs = new ArrayList<Bugs>();
 
 	public static void main(String[] args) {
@@ -27,6 +28,12 @@ public class Bugs {
 		}
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return bug_id + bug_type + bug_desc ;
+	}
+	
 	public boolean initialize_db() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -63,13 +70,9 @@ public class Bugs {
 		}
 	}
 
-	public ArrayList<Bugs> getBugs(String user_id, String filter) {
+	public ArrayList<Bugs> getBugs(String user_id) {
 		String getBugs = "";
-		if(filter.equalsIgnoreCase("EMP_ID")) {
-			getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ?";
-		}else if(filter.equalsIgnoreCase("TYPE")){
-			getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE BUG_TYPE = ?";
-		}
+		getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ?";
 		if(con != null) {
 			try {
 				PreparedStatement smt = con.prepareStatement(getBugs);
@@ -81,6 +84,7 @@ public class Bugs {
 					b.bug_id = rs.getString(1);
 					b.bug_desc = rs.getString(2);
 					b.bug_type = rs.getString(3);
+					b.status = rs.getString(5);
 					bugs.add(b);
 				}
 				return bugs;
@@ -92,8 +96,39 @@ public class Bugs {
 		}
 		return null;
 	}
-	
-	
+
+	public ArrayList<Bugs> getBugs(String type, String user_id) {
+		
+		initialize_db();
+		String getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ? AND BUG_TYPE = ?";
+		
+		if(con != null) {
+			try {
+				PreparedStatement smt = con.prepareStatement(getBugs);
+				smt.setString(1, user_id);
+				smt.setString(2, type);
+				
+				ResultSet rs = smt.executeQuery();
+
+				while(rs.next()) {
+					Bugs b = new Bugs();
+					b.bug_id = rs.getString(1);
+					b.bug_desc = rs.getString(2);
+					b.bug_type = rs.getString(3);
+					b.status = rs.getString(5);
+					bugs.add(b);
+				}
+				return bugs;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
+	}
+
+
 
 
 	public Connection getCon() {
@@ -133,6 +168,14 @@ public class Bugs {
 		this.bug_id = bug_id;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 
 
 }

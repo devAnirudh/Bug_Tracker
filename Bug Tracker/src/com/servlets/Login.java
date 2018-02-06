@@ -78,12 +78,12 @@ public class Login extends HttpServlet {
 				String username = val.getEmployee_name();
 				String name[] = username.split(" ");
 				co_f_name = new Cookie("user_f_name", name[0]);
-				co_f_name.setMaxAge(60);
-				session.setMaxInactiveInterval(60);
+				co_f_name.setMaxAge(1800);
+				session.setMaxInactiveInterval(1800);
 
 				if(name.length > 1 ) {
 					co_l_name = new Cookie("user_l_name",name[1]);
-					co_l_name.setMaxAge(60);
+					co_l_name.setMaxAge(1800);
 				}
 
 				if(co_f_name != null) {
