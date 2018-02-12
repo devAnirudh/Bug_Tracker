@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <style>
@@ -15,12 +17,6 @@ body {
 .container_login {
 	padding-top: 250px;
 	padding-bottom: 50px;
-}
-
-.container_signup {
-	opacity: 0;
-	-webkit-transition: opacity 1s linear;
-	*
 }
 
 label {
@@ -74,7 +70,7 @@ input {
 	</form>
 
 	<i><font color="#edf0f2"> New employee..? </font></i>
-	<input type="submit" onclick="register()" id="register"
+	<input type="submit" id="register"
 		value="Register">
 
 	<form method="post" action="Signup" onsubmit="return validateSignup();">
@@ -211,27 +207,19 @@ input {
 
 			return is_complete;
 		}
-
-		function register() {
-
-			var signup_div = document.getElementById("container_signup");
-
-			if (signup_div.style.display === "none") {
-				signup_div.style.display = "block";
-				signup_div.style.opacity = 1;
-			} else {
-				signup_div.style.display = "none";
-				signup_div.style.opacity = 0;
-			}
-
-		}
 		
 		function trim_input(id) {
 			var input = document.getElementById(id);
-			input.value = input.value.trim();
-			
-			
+			input.value = input.value.trim();	
 		}
+		
+		$(document).ready(function(){
+			$("#register").click(function(){
+				$("#container_signup").toggle(500);
+				
+				
+			});
+		});
 	</script>
 
 </body>

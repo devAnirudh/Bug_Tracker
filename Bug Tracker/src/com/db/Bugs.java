@@ -127,7 +127,37 @@ public class Bugs {
 		}
 		return null;
 	}
-
+	
+	public int updateStatus(String id, String desc, String status) {
+		
+		initialize_db();
+		int result = 0;
+		
+		String update_query = "UPDATE ANIRUDDHA_DB.BUGS " +
+				"SET STATUS = ?, " +
+				"RESOLUTION = ? " +
+				"WHERE idbugs = ?";
+		System.out.println(update_query);
+		if(con != null) {
+			try {
+				PreparedStatement smt = con.prepareStatement(update_query);
+				smt.setString(1, status);
+				smt.setString(2, desc);
+				smt.setString(3, id);
+				
+				result = smt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}
+			
+		}else {
+			return -1;
+		}
+		return result;
+	}
 
 
 
