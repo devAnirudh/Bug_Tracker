@@ -5,7 +5,7 @@
 <%
 	String type = request.getParameter("bug");
 	String user_id = session.getAttribute("employee_id").toString();
-	System.out.println(user_id);
+	
 	Bugs b1 = new Bugs();
 	b1.initialize_db();
 	ArrayList<Bugs> bugs = b1.getBugs(type, user_id);
@@ -24,7 +24,8 @@
 			out.append("\"id\":" + b.getBug_id() + ", ");
 			out.append("\"desc\":\"" + b.getBug_desc() + "\", ");
 			out.append("\"type\":\"" + b.getBug_type() + "\", ");
-			out.append("\"status\":\"" + b.getStatus()+ "\"");
+			out.append("\"status\":\"" + b.getStatus()+ "\", ");
+			out.append("\"resolution\":\"" + b.getResolution()+ "\"");
 			out.append("}");
 		}
 		

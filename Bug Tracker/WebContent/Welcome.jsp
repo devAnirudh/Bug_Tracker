@@ -13,6 +13,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 <title>Welcome to RPA bug tracker</title>
 <style type="text/css">
 #assigned {
@@ -70,6 +71,9 @@
 			<tr>
 				<td>Select type of bug:</td>
 				<td><select id="bug_list" onchange="sendSelected()">
+						<option value = "%25">
+							Select
+						</option>
 						<%
 							for (String bug_type : bug_list) {
 						%>
@@ -105,8 +109,8 @@
 				<td><%=bugs.get(i).getBug_desc()%></td>
 				<td><%=bugs.get(i).getBug_type()%></td>
 				<td><%=bugs.get(i).getStatus()%></td>
-				<td class="update" data-toggle="modal" data-target="#myModal"
-					style="cursor: pointer;"><a onclick="updateDesc()">Update</a></td>
+				<td class="update"><a data-toggle="modal" data-target="#myModal"
+					style="cursor: pointer;" onclick="updateDesc()">Update</a></td>
 			</tr>
 			<%
 				}
@@ -116,7 +120,7 @@
 	</div>
 
 	<div class="container">
-		<h2>Bug Resolution</h2>
+		
 		<div class="modal fade" id="myModal" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -137,6 +141,8 @@
 							<b>Description</b>
 						</p>
 						<textarea id="desc_input" name="desc" cols="60" rows="5"></textarea>
+						
+						<p id = "type" hidden></p>
 						<p>
 							<b>Status</b>
 						</p>
@@ -155,10 +161,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<div style="width: 50%; margin: auto;">
-		<button class="btn-success">Update</button>
 	</div>
 
 </body>
@@ -188,6 +190,7 @@
 		var d = document.getElementById("bug_list");
 		var bug_table = document.getElementById("bug_table");
 		var selectedBug = d.options[d.selectedIndex].value;
+		
 		var url = "FilteredBugs.jsp?bug=" + selectedBug;
 
 		request = new XMLHttpRequest();
@@ -197,26 +200,7 @@
 		request.onreadystatechange = function getInfo() {
 			if (request.readyState == 4) {
 
-				for (i = 1; i < bug_table.rows.length; i++) {
-
-					for (j = 0; j < bug_table.rows[i].cells.length; j++) {
-						bug_table.rows[i].cells[j].innerHTML = "";
-					}
-				}
-				var obj = JSON.parse(this.responseText);
-				for (i = 0; i < obj.length; i++) {
-					if (obj[i].status == "Unresolved") {
-						bug_table.rows[i + 1].className = "danger";
-					} else {
-						bug_table.rows[i + 1].className = "success";
-					}
-					bug_table.rows[i + 1].cells[0].innerHTML = obj[i].id;
-					bug_table.rows[i + 1].cells[1].innerHTML = obj[i].desc;
-					bug_table.rows[i + 1].cells[2].innerHTML = obj[i].type;
-					bug_table.rows[i + 1].cells[3].innerHTML = obj[i].status;
-					bug_table.rows[i + 1].cells[4].innerHTML = "Update"
-
-				}
+				setTable(this.responseText, bug_table);
 			}
 		}
 	}
@@ -228,6 +212,43 @@
 		option_status.value = "Select";
 
 	}
+	
+	function setTable(responseText, bug_table) {
+		
+		for (i = 1; i < bug_table.rows.length; i++) {
+
+			for (j = 0; j < bug_table.rows[i].cells.length; j++) {
+				bug_table.rows[i].cells[j].innerHTML = "";
+			}
+		}
+		var obj = JSON.parse(responseText);
+		for (i = 0; i < obj.length; i++) {
+			if (obj[i].status == "Unresolved") {
+				bug_table.rows[i + 1].className = "danger";
+			} else if (obj[i].status == "Resolved"){
+				bug_table.rows[i + 1].className = "success";
+			} else if ((obj[i].status == "WIP")) {
+				bug_table.rows[i + 1].className = "warning";
+			}
+			bug_table.rows[i + 1].cells[0].innerHTML = obj[i].id;
+			bug_table.rows[i + 1].cells[1].innerHTML = obj[i].desc;
+			bug_table.rows[i + 1].cells[2].innerHTML = obj[i].type;
+			bug_table.rows[i + 1].cells[3].innerHTML = obj[i].status;
+			if(obj[i].resolution != null){
+					bug_table.rows[i + 1].cells[3].title = obj[i].resolution;
+			}
+			bug_table.rows[i + 1].cells[4].innerHTML = "<a data-toggle=\"modal\" data-target=\"#myModal\" style=\"cursor: pointer;\" onclick=updateDesc()>Update</a>";
+
+		}
+		
+		for (i = 1; i < bug_table.rows.length; i++) {
+
+				if(bug_table.rows[i].cells[0].innerHTML == "") {
+					bug_table.deleteRow(i);
+				}
+		}
+		
+	}
 
 	$(document).ready(function() {
 		$(".update").click(function() {
@@ -235,27 +256,31 @@
 			var table = document.getElementById("bug_table");
 			var id = table.rows[index + 1].cells[0].innerHTML;
 			var desc = table.rows[index + 1].cells[1].innerHTML;
-
+			var type = table.rows[index + 1].cells[2].innerHTML;
 			$("#b_id").html(id);
 			$("#b_desc").html(desc);
+			$("#type").html(type);
 		});
 
 		$("#updateSubmit").click(function() {
-
 			$.ajax({
 				url : "UpdateBugs.jsp",
 				type : "post",
 				data : {
 					id : $("#b_id").html(),
-					bug_desc : $("#desc_input").html(),
-					status : $("#status").val()
+					bug_desc : $("#desc_input").val(),
+					status : $("#status").val(),
+					bug_type : $("#type").html(),
 				},
 				async : false,
-				dataType : 'json',
+				
 				success : function(result) {
-					alert(result);
+					setTable(result);
 				}
 			});
+			
+			$("#status").val("Select");
+			$("#desc_input").val("");
 
 		});
 	});

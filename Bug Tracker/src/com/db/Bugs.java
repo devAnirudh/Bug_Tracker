@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import nl.captcha.Captcha;
+
 public class Bugs {
 
 	private Connection con;
@@ -14,6 +16,7 @@ public class Bugs {
 	private String bug_desc;
 	private String bug_id;
 	private String status;
+	private String resolution;
 	private ArrayList<Bugs> bugs = new ArrayList<Bugs>();
 
 	public static void main(String[] args) {
@@ -85,6 +88,7 @@ public class Bugs {
 					b.bug_desc = rs.getString(2);
 					b.bug_type = rs.getString(3);
 					b.status = rs.getString(5);
+					b.resolution = rs.getString(6);
 					bugs.add(b);
 				}
 				return bugs;
@@ -100,7 +104,8 @@ public class Bugs {
 	public ArrayList<Bugs> getBugs(String type, String user_id) {
 		
 		initialize_db();
-		String getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ? AND BUG_TYPE = ?";
+		
+		String getBugs = "SELECT * FROM ANIRUDDHA_DB.BUGS WHERE EMP_ID = ? AND BUG_TYPE LIKE ?";
 		
 		if(con != null) {
 			try {
@@ -116,6 +121,7 @@ public class Bugs {
 					b.bug_desc = rs.getString(2);
 					b.bug_type = rs.getString(3);
 					b.status = rs.getString(5);
+					b.resolution = rs.getString(6);
 					bugs.add(b);
 				}
 				return bugs;
@@ -137,7 +143,7 @@ public class Bugs {
 				"SET STATUS = ?, " +
 				"RESOLUTION = ? " +
 				"WHERE idbugs = ?";
-		System.out.println(update_query);
+		
 		if(con != null) {
 			try {
 				PreparedStatement smt = con.prepareStatement(update_query);
@@ -204,6 +210,14 @@ public class Bugs {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getResolution() {
+		return resolution;
+	}
+
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
 	}
 	
 

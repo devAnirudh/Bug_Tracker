@@ -43,63 +43,64 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-
-		if(request.getCookies().length > 1) {
-			response.sendRedirect("Welcome.jsp");
-		}else {
-			
-			response.setContentType("text/html");
-			doGet(request, response);
-
-			PrintWriter out = response.getWriter();
-			Validation val = new Validation();
-			String uname = request.getParameter("uname").trim();
-			String pword = request.getParameter("pword").trim();
-			Cookie co_f_name, co_l_name = null;
-
-
-			if(uname.trim().equalsIgnoreCase("") || pword.trim().equalsIgnoreCase("")) {
-
-				out.println("Username or Password can't be blank..!!");
-				RequestDispatcher dis = request.getRequestDispatcher("Login.jsp");
-				dis.include(request, response);
-
-			}else if(!val.validate(uname, pword).equalsIgnoreCase("")) {
-				/**
-				 * Session Tracking using Session
-				 */
-				  HttpSession session = request.getSession();
-				  session.setAttribute("employee_id", val.getEmployee_id());
-
-				/**
-				 * Session Tracking using Cookies
-				 * */
-
-				String username = val.getEmployee_name();
-				String name[] = username.split(" ");
-				co_f_name = new Cookie("user_f_name", name[0]);
-				co_f_name.setMaxAge(1800);
-				session.setMaxInactiveInterval(1800);
-
-				if(name.length > 1 ) {
-					co_l_name = new Cookie("user_l_name",name[1]);
-					co_l_name.setMaxAge(1800);
-				}
-
-				if(co_f_name != null) {
-					response.addCookie(co_f_name);
-				}
-				if(co_l_name != null) {
-					response.addCookie(co_l_name);
-				}
-
+		if(request.getCookies() !=  null) {
+			if(request.getCookies().length > 1) {
 				response.sendRedirect("Welcome.jsp");
+			}else {
 
-			} else {
-				out.println("<p id = \"message\">Username or Password incorrect..!!</p>");
-				RequestDispatcher dis = request.getRequestDispatcher("Login.jsp");
-				dis.include(request, response);
+				response.setContentType("text/html");
+				doGet(request, response);
 
+				PrintWriter out = response.getWriter();
+				Validation val = new Validation();
+				String uname = request.getParameter("uname").trim();
+				String pword = request.getParameter("pword").trim();
+				Cookie co_f_name, co_l_name = null;
+
+
+				if(uname.trim().equalsIgnoreCase("") || pword.trim().equalsIgnoreCase("")) {
+
+					out.println("Username or Password can't be blank..!!");
+					RequestDispatcher dis = request.getRequestDispatcher("Login.jsp");
+					dis.include(request, response);
+
+				}else if(!val.validate(uname, pword).equalsIgnoreCase("")) {
+					/**
+					 * Session Tracking using Session
+					 */
+					HttpSession session = request.getSession();
+					session.setAttribute("employee_id", val.getEmployee_id());
+
+					/**
+					 * Session Tracking using Cookies
+					 * */
+
+					String username = val.getEmployee_name();
+					String name[] = username.split(" ");
+					co_f_name = new Cookie("user_f_name", name[0]);
+					co_f_name.setMaxAge(1800);
+					session.setMaxInactiveInterval(1800);
+
+					if(name.length > 1 ) {
+						co_l_name = new Cookie("user_l_name",name[1]);
+						co_l_name.setMaxAge(1800);
+					}
+
+					if(co_f_name != null) {
+						response.addCookie(co_f_name);
+					}
+					if(co_l_name != null) {
+						response.addCookie(co_l_name);
+					}
+
+					response.sendRedirect("Welcome.jsp");
+
+				} else {
+					out.println("<p id = \"message\">Username or Password incorrect..!!</p>");
+					RequestDispatcher dis = request.getRequestDispatcher("Login.jsp");
+					dis.include(request, response);
+
+				}
 			}
 		}
 

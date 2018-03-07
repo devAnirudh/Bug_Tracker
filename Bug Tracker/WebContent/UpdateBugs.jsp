@@ -6,14 +6,13 @@
 	String id = request.getParameter("id").toString();
 	String desc = request.getParameter("bug_desc").toString();
 	String status = request.getParameter("status").toString();
-	System.out.println("Bug Id" + id);
-	System.out.println("Bug desc" + desc);
-	System.out.println("Bug Status" + status);
+	String bug_type = request.getParameter("bug_type").toString();
 	
 	Bugs b1 = new Bugs();
 	int result = b1.updateStatus(id, desc, status);
 	out.append(Integer.toString((result)));
 	out.append("Success");
 	
+	response.sendRedirect("FilteredBugs.jsp?bug=" + bug_type);
 
 %>
