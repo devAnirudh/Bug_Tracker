@@ -50,23 +50,7 @@ input {
 </head>
 
 <body>
-
-	<%
-		File folder = (File) getServletContext().getAttribute(ServletContext.TEMPDIR);
-		System.out.println(folder.getAbsolutePath());
-		File result = new File("test1234.xml");
-		result.createNewFile();
-
-		System.out.println("Context Path: " + request.getContextPath());
-
-		if (request.getCookies() != null && request.getCookies().length > 1) {
-			response.sendRedirect("Welcome.jsp");
-		}
-	%>
-
-
-	<img id=c_img src = "Test.jsp" alt="image" height="100px" width="100px">
-
+	
 
 	<form action="Login" method="post">
 		<div class="container_login" id="container_login"

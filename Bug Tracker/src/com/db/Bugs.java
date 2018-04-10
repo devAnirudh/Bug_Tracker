@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import nl.captcha.Captcha;
-
 public class Bugs {
 
 	private Connection con;
